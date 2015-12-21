@@ -7,6 +7,9 @@ app.controller('AppCtrl', function($scope) {
   $scope.displayPush = 0;
   $scope.displayDistancePerPush = 0;
 
+  var sessionNumber = 1;
+  var savedSessions = [];
+
   var MESSAGE_SCHEMA = {
     "type": 'object',
     "properties": {
@@ -55,12 +58,22 @@ app.controller('AppCtrl', function($scope) {
     });
 
     $scope.reset = function(){
-      console.log('reset data');
-
       conn.message({
         "devices": "*",
         "payload": {
           "reset": 1
+        }
+      });
+    }
+
+    $scope.saveSession = function(){
+      savedSessions.push({"session": sessionNumber, "distance": $scope.displayDistance, "pushes": $scope.displayPush});
+      sessionNumber ++;
+      $scope.reset();
+      conn.message({
+        "devices": "*",
+        "payload": {
+          "savedSkateData": savedSessions
         }
       });
     }
