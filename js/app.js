@@ -5,6 +5,7 @@ app.controller('AppCtrl', function($scope) {
   // initialize with at least something
   $scope.displayDistance = 0;
   $scope.displayPush = 0;
+  $scope.displayDistancePerPush = 0;
 
   var MESSAGE_SCHEMA = {
     "type": 'object',
