@@ -54,18 +54,15 @@ app.controller('AppCtrl', function($scope) {
       $scope.payload(data);
     });
 
-    $scope.sendMessage = function(){
-      console.log('sending message!');
-      var message = {
+    $scope.reset = function(){
+      console.log('reset data');
+
+      conn.message({
         "devices": "*",
         "payload": {
-          "ngclickEvent": true
+          "reset": 1
         }
-      };
-      conn.message(message);
+      });
     }
-
-
   });
-
 });
