@@ -2,7 +2,6 @@ var app = angular.module('MyApp',['ngMaterial']);
 
 app.controller('AppCtrl', function($scope) {
 
-  // initialize with at least something
   $scope.displayDistance = 0;
   $scope.displayPush = 0;
   $scope.displayDistancePerPush = 0;
@@ -48,6 +47,7 @@ app.controller('AppCtrl', function($scope) {
   conn.on('ready', function(data){
     console.log('UUID AUTHENTICATED!');
     console.log(data);
+
     conn.update({
       "uuid": GET.uuid,
       "messageSchema": MESSAGE_SCHEMA
@@ -70,6 +70,7 @@ app.controller('AppCtrl', function($scope) {
       savedSessions.push({"session": sessionNumber, "distance": $scope.displayDistance, "pushes": $scope.displayPush});
       sessionNumber ++;
       $scope.reset();
+      
       conn.message({
         "devices": "*",
         "payload": {
