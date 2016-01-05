@@ -22,9 +22,9 @@ app.controller('AppCtrl', function($scope) {
   };
 
   $scope.payload = function(data){
-    $scope.displayDistance = data.payload.distance.toFixed(2) + " meters";
+    $scope.displayDistance = data.payload.distance.toFixed(2);
     $scope.displayPush = data.payload.pushes;
-    $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2) + " meters";
+    $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2);
 
     $scope.$apply()
   }
