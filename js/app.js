@@ -22,6 +22,7 @@ app.controller('AppCtrl', function($scope) {
   };
 
   $scope.payload = function(data){
+    $scope.rawDistance = data.payload.distance;
     $scope.displayDistance = data.payload.distance.toFixed(2);
     $scope.displayPush = data.payload.pushes;
     $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2);
@@ -67,7 +68,7 @@ app.controller('AppCtrl', function($scope) {
     }
 
     $scope.saveSession = function(){
-      savedSessions.unshift({"session": sessionNumber, "distance": $scope.displayDistance, "pushes": $scope.displayPush});
+      savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
       sessionNumber ++;
       $scope.reset();
 
