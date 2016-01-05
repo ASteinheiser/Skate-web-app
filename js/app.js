@@ -67,7 +67,7 @@ app.controller('AppCtrl', function($scope) {
     }
 
     $scope.saveSession = function(){
-      savedSessions.push({"session": sessionNumber, "distance": $scope.displayDistance, "pushes": $scope.displayPush});
+      savedSessions.unshift({"session": sessionNumber, "distance": $scope.displayDistance, "pushes": $scope.displayPush});
       sessionNumber ++;
       $scope.reset();
 
