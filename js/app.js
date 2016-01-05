@@ -31,8 +31,8 @@ app.controller('AppCtrl', function($scope) {
 
   var GET = {};
   var query = window.location.search.substring(1).split("&");
-  for (var i = 0, max = query.length; i < max; i++)
-  {
+
+  for (var i = 0, max = query.length; i < max; i++){
     if (query[i] === "")
     continue;
     var param = query[i].split("=");
@@ -70,7 +70,7 @@ app.controller('AppCtrl', function($scope) {
       savedSessions.push({"session": sessionNumber, "distance": $scope.displayDistance, "pushes": $scope.displayPush});
       sessionNumber ++;
       $scope.reset();
-      
+
       conn.message({
         "devices": "*",
         "payload": {
