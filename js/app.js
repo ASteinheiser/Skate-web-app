@@ -1,19 +1,24 @@
 var app = angular.module('MyApp',['ngMaterial']);
 
-app.controller('AppCtrl', function($scope) {
+app.controller('AppCtrl', function($scope, $mdDialog) {
 
+  $scope.rawDistance = 0;
   $scope.displayDistance = 0;
   $scope.displayPush = 0;
   $scope.displayDistancePerPush = 0;
+  $scope.savedSessions = [];
 
   var sessionNumber = 1;
   var savedSessions = [];
 
   $scope.payload = function(data){
     $scope.rawDistance = data.payload.distance;
+
     $scope.displayDistance = data.payload.distance.toFixed(2) + "meters";
     $scope.displayPush = data.payload.pushes;
     $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2) + "meters";
+
+    $scope.savedSessions = data.payload.savedSessions;
 
     $scope.$apply();
   };
@@ -30,6 +35,18 @@ app.controller('AppCtrl', function($scope) {
     savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
     sessionNumber ++;
     conn.message({"devices": "*", "save": true, "savedSessions": savedSessions});
+  };
+
+  $scope.showSessions = function(ev) {
+    $mdDialog.show(
+      $mdDialog.alert()
+        .parent(angular.element(document.querySelector('#popupContainer')))
+        .clickOutsideToClose(true)
+        .title('Saved Sessions:')
+        .textContent($scope.savedSessions)
+        .ok('close')
+        .targetEvent(ev)
+    );
   };
 
   var MESSAGE_SCHEMA = {
