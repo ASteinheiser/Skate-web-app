@@ -17,40 +17,40 @@
 
 <body ng-app="MyApp" ng-controller="AppCtrl" layout="column">
 
-  <md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
-    <md-card>
-      <md-toolbar class="md-padding">
-        <span>Total distance (m)</span>
-      </md-toolbar>
-      <md-card-title-text class="md-padding">
-        <span class="md-headline">{{displayDistance}}</span>
-      </md-card-title-text>
-    </md-card>
-  </md-content>
+  <md-card class="centerCard">
+    <md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
+      <md-card>
+        <md-toolbar class="md-padding">
+          <span>Total distance</span>
+        </md-toolbar>
+        <md-card-title-text class="md-padding">
+          <span class="md-headline">{{displayDistance}}</span>
+        </md-card-title-text>
+      </md-card>
 
-  <md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
-    <md-card>
-      <md-toolbar class="md-padding">
-        <span>Total pushes</span>
-      </md-toolbar>
-      <md-card-title-text class="md-padding">
-        <span class="md-headline">{{displayPush}}</span>
-      </md-card-title-text>
-    </md-card>
-  </md-content>
+      <md-card>
+        <md-toolbar class="md-padding">
+          <span>Total pushes</span>
+        </md-toolbar>
+        <md-card-title-text class="md-padding">
+          <span class="md-headline">{{displayPush}}</span>
+        </md-card-title-text>
+      </md-card>
 
-  <md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
-    <md-card>
-      <md-toolbar class="md-padding">
-        <span>Average distance per push (m)</span>
-      </md-toolbar>
-      <md-card-title-text class="md-padding">
-        <span class="md-headline">{{displayDistancePerPush}}</span>
-      </md-card-title-text>
-    </md-card>
-  </md-content>
+      <md-card>
+        <md-toolbar class="md-padding">
+          <span>Average distance per push</span>
+        </md-toolbar>
+        <md-card-title-text class="md-padding">
+          <span class="md-headline">{{displayDistancePerPush}}</span>
+        </md-card-title-text>
+      </md-card>
+    </md-content>
 
-  <md-button class="md-raised md-primary" ng-click="saveSession()">Save Session</md-button>
-  <md-button class="md-raised md-primary" ng-click="reset()">Reset</md-button>
+    <md-content class="md-padding center" layout="column" layout-wrap layout-align="center start">
+      <md-button class="md-raised md-primary maxWidth" ng-click="saveSession()">Save Session</md-button>
+      <md-button class="md-raised md-primary maxWidth" ng-click="reset()">Reset</md-button>
+    </md-content>
+  </md-card>
 </body>
 </html>

@@ -1,0 +1,12 @@
+.center {
+  align-items: center;
+}
+
+.maxWidth {
+  width: 100%;
+}
+
+.centerCard {
+  width: 723px;
+  align-self: center;
+}
