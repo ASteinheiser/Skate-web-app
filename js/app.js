@@ -14,9 +14,9 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
   $scope.payload = function(data){
     $scope.rawDistance = data.payload.distance;
 
-    $scope.displayDistance = data.payload.distance.toFixed(2) + "meters";
+    $scope.displayDistance = data.payload.distance.toFixed(2) + " meters";
     $scope.displayPush = data.payload.pushes;
-    $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2) + "meters";
+    $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2) + " meters";
 
     $scope.savedSessions = data.payload.savedSessions;
 
