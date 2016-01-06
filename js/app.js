@@ -9,6 +9,32 @@ app.controller('AppCtrl', function($scope) {
   var sessionNumber = 1;
   var savedSessions = [];
 
+  function sendMessage(topic, message){
+    conn.message({
+      "devices": "*",
+      topic: message
+    });
+  };
+
+  $scope.saveSession = function(){
+    savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
+    sessionNumber ++;
+    conn.message({"devices": "*", "save": true, "savedSessions": savedSessions});
+  }
+
+  $scope.reset = function(){
+    sendMessage("reset", true);
+  }
+
+  $scope.payload = function(data){
+    $scope.rawDistance = data.payload.distance;
+    $scope.displayDistance = data.payload.distance.toFixed(2);
+    $scope.displayPush = data.payload.pushes;
+    $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2);
+
+    $scope.$apply()
+  }
+
   var MESSAGE_SCHEMA = {
     "type": 'object',
     "properties": {
@@ -20,15 +46,6 @@ app.controller('AppCtrl', function($scope) {
       }
     }
   };
-
-  $scope.payload = function(data){
-    $scope.rawDistance = data.payload.distance;
-    $scope.displayDistance = data.payload.distance.toFixed(2);
-    $scope.displayPush = data.payload.pushes;
-    $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2);
-
-    $scope.$apply()
-  }
 
   var GET = {};
   var query = window.location.search.substring(1).split("&");
@@ -57,26 +74,5 @@ app.controller('AppCtrl', function($scope) {
     conn.on('message', function(data){
       $scope.payload(data);
     });
-
-    $scope.reset = function(){
-      conn.message({
-        "devices": "*",
-        "payload": {
-          "reset": 1
-        }
-      });
-    }
-
-    $scope.saveSession = function(){
-      savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
-      sessionNumber ++;
-
-      conn.message({
-        "devices": "*",
-        "payload": {
-          "savedSkateData": savedSessions
-        }
-      });
-    }
   });
 });
