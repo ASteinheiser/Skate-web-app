@@ -9,28 +9,21 @@ app.controller('AppCtrl', function($scope) {
   var sessionNumber = 1;
   var savedSessions = [];
 
-  function sendMessage(topic, message){
-    conn.message({
-      "devices": "*",
-      topic: message
-    });
-  };
-
   $scope.payload = function(data){
     $scope.rawDistance = data.payload.distance;
     $scope.displayDistance = data.payload.distance.toFixed(2) + "meters";
     $scope.displayPush = data.payload.pushes;
     $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2) + "meters";
 
-    $scope.$apply()
+    $scope.$apply();
   };
 
   $scope.reset = function(){
-    sendMessage("reset", true);
+    conn.message({"devices": "*", "reset": true});
   };
 
   $scope.resetSessions = function(){
-    sendMessage("resetSessions", true);
+    conn.message({"devices": "*", "resetSessions": true});
   };
 
   $scope.saveSession = function(){
