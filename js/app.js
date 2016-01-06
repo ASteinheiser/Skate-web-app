@@ -16,16 +16,6 @@ app.controller('AppCtrl', function($scope) {
     });
   };
 
-  $scope.saveSession = function(){
-    savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
-    sessionNumber ++;
-    conn.message({"devices": "*", "save": true, "savedSessions": savedSessions});
-  }
-
-  $scope.reset = function(){
-    sendMessage("reset", true);
-  }
-
   $scope.payload = function(data){
     $scope.rawDistance = data.payload.distance;
     $scope.displayDistance = data.payload.distance.toFixed(2) + "meters";
@@ -33,7 +23,21 @@ app.controller('AppCtrl', function($scope) {
     $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2) + "meters";
 
     $scope.$apply()
-  }
+  };
+
+  $scope.reset = function(){
+    sendMessage("reset", true);
+  };
+
+  $scope.resetSessions = function(){
+    sendMessage("resetSessions", true);
+  };
+
+  $scope.saveSession = function(){
+    savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
+    sessionNumber ++;
+    conn.message({"devices": "*", "save": true, "savedSessions": savedSessions});
+  };
 
   var MESSAGE_SCHEMA = {
     "type": 'object',
