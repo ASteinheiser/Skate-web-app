@@ -90,7 +90,9 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
 
     conn.update({
       "uuid": GET.uuid,
-      "messageSchema": MESSAGE_SCHEMA
+      "messageSchema": MESSAGE_SCHEMA,
+      "type": "device:skate-web-app",
+      "logoUrl": "https://s3-us-west-2.amazonaws.com/octoblu-icons/device/skate-web-app.svg"
     });
 
     conn.on('message', function(data){
