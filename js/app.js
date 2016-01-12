@@ -6,9 +6,8 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
   $scope.displayDistance = 0;
   $scope.displayPush = 0;
   $scope.displayDistancePerPush = 0;
-  $scope.savedSessions = [];
 
-  var sessionNumber = 1;
+  var sessionNumber = 0;
   var savedSessions = [];
 
   $scope.payload = function(data){
@@ -17,8 +16,6 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
     $scope.displayDistance = data.payload.distance.toFixed(2) + " meters";
     $scope.displayPush = data.payload.pushes;
     $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2) + " meters";
-
-    $scope.savedSessions = data.payload.savedSessions;
 
     $scope.$apply();
   };
@@ -34,8 +31,8 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
   };
 
   $scope.saveSession = function(){
-    savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
     sessionNumber ++;
+    savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
     updateSession(savedSessions);
   };
 
@@ -45,7 +42,7 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
         .parent(angular.element(document.querySelector('#popupContainer')))
         .clickOutsideToClose(true)
         .title('Saved Sessions:')
-        .textContent($scope.savedSessions)
+        .textContent(savedSessions)
         .ok('close')
         .targetEvent(ev)
     );
@@ -88,6 +85,7 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
 
     conn.whoami({}, function(device){
       savedSessions = device.savedSessions;
+      sessionNumber = savedSessions[0].session;
     });
 
     conn.update({
