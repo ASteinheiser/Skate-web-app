@@ -28,13 +28,15 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
   };
 
   $scope.resetSessions = function(){
-    conn.message({"devices": "*", "resetSessions": true});
+    savedSessions = [];
+    sessionNumber = 1;
+    updateSession(savedSessions);
   };
 
   $scope.saveSession = function(){
     savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
     sessionNumber ++;
-    conn.message({"devices": "*", "save": true, "savedSessions": savedSessions});
+    updateSession(savedSessions);
   };
 
   $scope.showSessions = function(ev) {
@@ -47,6 +49,10 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
         .ok('close')
         .targetEvent(ev)
     );
+  };
+
+  function updateSession(data) {
+    conn.update({"savedSessions": data});
   };
 
   var MESSAGE_SCHEMA = {
@@ -79,6 +85,10 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
   conn.on('ready', function(data){
     console.log('UUID AUTHENTICATED!');
     console.log(data);
+
+    conn.whoami({}, function(device){
+      savedSessions = device.savedSessions;
+    });
 
     conn.update({
       "uuid": GET.uuid,
