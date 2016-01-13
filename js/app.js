@@ -26,7 +26,7 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
 
   $scope.resetSessions = function(){
     savedSessions = [];
-    sessionNumber = 1;
+    sessionNumber = 0;
     updateSession(savedSessions);
   };
 
