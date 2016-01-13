@@ -34,6 +34,7 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
     sessionNumber ++;
     savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
     updateSession(savedSessions);
+    $scope.reset();
   };
 
   $scope.showSessions = function(ev) {
