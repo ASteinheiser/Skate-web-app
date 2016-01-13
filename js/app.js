@@ -69,24 +69,22 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
   var token = localStorage.getItem('skate-web-app.token');
 
   var connectionOptions = {};
-  console.log(connectionOptions)
 
-  if(uuid && token){
+  if(uuid != "null" && token != "null"){
     connectionOptions.uuid = uuid;
     connectionOptions.token = token;
   }
-  console.log(connectionOptions)
+
   var conn = meshblu.createConnection(connectionOptions);
 
   conn.on('ready', function(data){
     console.log('UUID AUTHENTICATED!');
     console.log(data);
 
-    localStorage.setItem('skate-web-app.uuid', uuid);
-    localStorage.setItem('skate-web-app.token', token);
+    localStorage.setItem('skate-web-app.uuid', data.uuid);
+    localStorage.setItem('skate-web-app.token', data.token);
 
     conn.whoami({}, function(device){
-      console.log("Device properties", device);
       savedSessions = device.savedSessions;
       sessionNumber = savedSessions[0].session;
     });
