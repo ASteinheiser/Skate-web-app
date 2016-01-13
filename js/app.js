@@ -65,32 +65,34 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
     }
   };
 
-  var GET = {};
-  var query = window.location.search.substring(1).split("&");
+  var uuid = localStorage.getItem('skate-web-app.uuid');
+  var token = localStorage.getItem('skate-web-app.token');
 
-  for (var i = 0, max = query.length; i < max; i++){
-    if (query[i] === "")
-    continue;
-    var param = query[i].split("=");
-    GET[decodeURIComponent(param[0])] = decodeURIComponent(param[1] || "");
+  var connectionOptions = {};
+  console.log(connectionOptions)
+
+  if(uuid && token){
+    connectionOptions.uuid = uuid;
+    connectionOptions.token = token;
   }
-
-  var conn = meshblu.createConnection({
-    "uuid": GET.uuid,
-    "token": GET.token
-  });
+  console.log(connectionOptions)
+  var conn = meshblu.createConnection(connectionOptions);
 
   conn.on('ready', function(data){
     console.log('UUID AUTHENTICATED!');
     console.log(data);
 
+    localStorage.setItem('skate-web-app.uuid', uuid);
+    localStorage.setItem('skate-web-app.token', token);
+
     conn.whoami({}, function(device){
+      console.log("Device properties", device);
       savedSessions = device.savedSessions;
       sessionNumber = savedSessions[0].session;
     });
 
     conn.update({
-      "uuid": GET.uuid,
+      "uuid": uuid,
       "messageSchema": MESSAGE_SCHEMA,
       "type": "device:skate-web-app",
       "logoUrl": "https://s3-us-west-2.amazonaws.com/octoblu-icons/device/skate-web-app.svg"
