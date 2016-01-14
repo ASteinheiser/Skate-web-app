@@ -10,7 +10,7 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
   $scope.displayDistancePerPush = 0;
 
   $scope.reset = function(){
-    conn.message({"devices": "*", "reset": true});
+    conn.message({"devices": ["*"], "reset": true});
   };
 
   $scope.resetSessions = function(){
