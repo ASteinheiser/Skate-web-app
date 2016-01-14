@@ -4,21 +4,11 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
 
   $scope.rawDistance = 0;
   $scope.displayDistance = 0;
-  $scope.displayPush = 0;
+  $scope.push = 0;
   $scope.displayDistancePerPush = 0;
 
   var sessionNumber = 0;
   var savedSessions = [];
-
-  $scope.payload = function(data){
-    $scope.rawDistance = data.payload.distance;
-
-    $scope.displayDistance = data.payload.distance.toFixed(2) + " meters";
-    $scope.displayPush = data.payload.pushes;
-    $scope.displayDistancePerPush = ((data.payload.distance)/(data.payload.pushes)).toFixed(2) + " meters";
-
-    $scope.$apply();
-  };
 
   $scope.reset = function(){
     conn.message({"devices": "*", "reset": true});
@@ -32,7 +22,7 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
 
   $scope.saveSession = function(){
     sessionNumber ++;
-    savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.displayPush});
+    savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.push});
     updateSession(savedSessions);
     $scope.reset();
   };
@@ -53,29 +43,17 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
     conn.update({"savedSessions": data});
   };
 
-  var MESSAGE_SCHEMA = {
-    "type": 'object',
-    "properties": {
-      "distance": {
-        "type": "string"
-      },
-      "pushes": {
-        "type": "string"
-      }
-    }
-  };
-
   var uuid = localStorage.getItem('skate-web-app.uuid');
   var token = localStorage.getItem('skate-web-app.token');
 
-  var connectionOptions = {};
+  var meshbluDevice = {};
 
   if(uuid != "null" && token != "null"){
-    connectionOptions.uuid = uuid;
-    connectionOptions.token = token;
+    meshbluDevice.uuid = uuid;
+    meshbluDevice.token = token;
   }
 
-  var conn = meshblu.createConnection(connectionOptions);
+  var conn = meshblu.createConnection(meshbluDevice);
 
   conn.on('ready', function(data){
     console.log('UUID AUTHENTICATED!');
@@ -91,13 +69,19 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
 
     conn.update({
       "uuid": uuid,
-      "messageSchema": MESSAGE_SCHEMA,
       "type": "device:skate-web-app",
       "logoUrl": "https://s3-us-west-2.amazonaws.com/octoblu-icons/device/skate-web-app.svg"
     });
 
-    conn.on('message', function(data){
-      $scope.payload(data);
+    conn.on('message', function(message){
+
+      $scope.push = message.payload.pushes;
+      $scope.rawDistance = message.payload.distance;
+
+      $scope.displayDistance = $scope.rawDistance.toFixed(2) + " meters";
+      $scope.displayDistancePerPush = ($scope.rawDistance/$scope.push).toFixed(2) + " meters";
+
+      $scope.$apply();
     });
   });
 });
