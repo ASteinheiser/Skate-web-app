@@ -2,13 +2,12 @@ var app = angular.module('MyApp',['ngMaterial']);
 
 app.controller('AppCtrl', function($scope, $mdDialog) {
 
+  var sessionNumber = 0;
+  var savedSessions = [];
   $scope.rawDistance = 0;
   $scope.displayDistance = 0;
   $scope.push = 0;
   $scope.displayDistancePerPush = 0;
-
-  var sessionNumber = 0;
-  var savedSessions = [];
 
   $scope.reset = function(){
     conn.message({"devices": "*", "reset": true});
@@ -17,13 +16,13 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
   $scope.resetSessions = function(){
     savedSessions = [];
     sessionNumber = 0;
-    updateSession(savedSessions);
+    conn.update({"savedSessions": savedSessions});
   };
 
   $scope.saveSession = function(){
     sessionNumber ++;
     savedSessions.unshift({"session": sessionNumber, "distance": $scope.rawDistance, "pushes": $scope.push});
-    updateSession(savedSessions);
+    conn.update({"savedSessions": savedSessions});
     $scope.reset();
   };
 
@@ -37,10 +36,6 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
         .ok('close')
         .targetEvent(ev)
     );
-  };
-
-  function updateSession(data) {
-    conn.update({"savedSessions": data});
   };
 
   var uuid = localStorage.getItem('skate-web-app.uuid');
@@ -63,8 +58,12 @@ app.controller('AppCtrl', function($scope, $mdDialog) {
     localStorage.setItem('skate-web-app.token', data.token);
 
     conn.whoami({}, function(device){
-      savedSessions = device.savedSessions;
-      sessionNumber = savedSessions[0].session;
+      if (device.savedSessions){
+        savedSessions = device.savedSessions;
+      }
+      if (savedSessions[0]){
+        sessionNumber = savedSessions[0].session;
+      }
     });
 
     conn.update({
